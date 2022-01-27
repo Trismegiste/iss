@@ -27,7 +27,7 @@ class SpaceStation
     {
         foreach ($this->grid as $row) {
             foreach ($row as $cell) {
-                echo $cell;
+                echo ($cell > 0) ? '██' : '  ';
             }
             echo PHP_EOL;
         }
@@ -45,13 +45,12 @@ class SpaceStation
 
         foreach ($this->grid as $x => $col) {
             foreach ($col as $y => $cell) {
+                $update[$x][$y] = $cell;
                 if ($cell === 0) {
                     $neighbor = $this->crossCount($x, $y);
                     if (($neighbor > 0) && (random_int(0, 100) < (25 * $neighbor))) {
                         $update[$x][$y] = 1;
                     }
-                } else {
-                    $update[$x][$y] = $cell;
                 }
             }
         }
