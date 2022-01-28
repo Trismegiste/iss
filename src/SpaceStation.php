@@ -16,6 +16,7 @@ class SpaceStation
 
     protected $side;
     protected $grid;
+    protected $door;
 
     public function __construct(int $side)
     {
@@ -109,20 +110,109 @@ class SpaceStation
             foreach ($col as $y => $cell) {
                 $x0 = $scale * $x;
                 $y0 = $scale * $y;
+                $style = "stroke: black; stroke-width: 3";
 
                 if ($cell !== $this->get($x, $y - 1)) {
                     $x2 = $x0 + $scale;
-                    echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" stroke=\"black\" />";
+                    echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" style=\"$style\"/>";
                 }
 
                 if ($cell !== $this->get($x - 1, $y)) {
                     $y2 = $y0 + $scale;
-                    echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x0\" y2=\"$y2\" stroke=\"black\" />";
+                    echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x0\" y2=\"$y2\" style=\"$style\"/>";
+                }
+            }
+        }
+
+
+        $style = "stroke: green; stroke-width: 5";
+        foreach ($this->door as $x => $col) {
+            foreach ($col as $y => $door) {
+                $x0 = $scale * $x;
+                $y0 = $scale * $y;
+                if ($door & 1) {
+                    $x1 = $x0 + $scale;
+                    $y1 = $y0 + $scale / 3;
+                    $y2 = $y0 + $scale * 2 / 3;
+                    echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x1\" y2=\"$y2\" style=\"$style\"/>";
+                }
+                if ($door & 4) {
+                    $x1 = $x0;
+                    $y1 = $y0 + $scale / 3;
+                    $y2 = $y0 + $scale * 2 / 3;
+                    echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x1\" y2=\"$y2\" style=\"$style\"/>";
+                }
+                if ($door & 2) {
+                    $x1 = $x0 + $scale / 3;
+                    $x2 = $x0 + $scale * 2 / 3;
+                    echo "<line x1=\"$x1\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" style=\"$style\"/>";
+                }
+                if ($door & 8) {
+                    $y1 = $y0 + $scale;
+                    $x1 = $x0 + $scale / 3;
+                    $x2 = $x0 + $scale * 2 / 3;
+                    echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x2\" y2=\"$y1\" style=\"$style\"/>";
                 }
             }
         }
 
         echo '</svg>';
+    }
+
+    public function roomIterationCapping(int $threshold): void
+    {
+        foreach ($this->grid as $x => $col) {
+            foreach ($col as $y => $cell) {
+                if ($cell > $threshold) {
+                    $this->grid[$x][$y] = $threshold;
+                }
+            }
+        }
+    }
+
+    public function findDoor()
+    {
+        $this->door = array_fill(0, $this->side, array_fill(0, $this->side, 0));
+
+        foreach ($this->grid as $x => $col) {
+            foreach ($col as $y => $cell) {
+                if ($cell === 0) {
+                    continue;
+                }
+
+                $xWalk = $x;
+                $yWalk = $y;
+
+                do {
+                    $direction = random_int(0, 3);
+                    switch ($direction) {
+                        case 0: $xWalk++;
+                            break;
+                        case 1: $yWalk--;
+                            break;
+                        case 2: $xWalk--;
+                            break;
+                        case 3: $yWalk++;
+                            break;
+                    }
+
+                    $currentGroup = $this->get($xWalk, $yWalk);
+                    if ($currentGroup !== $cell) {
+                        // we've just crossed a border
+                        switch ($direction) {
+                            case 0: $this->door[$xWalk - 1][$yWalk] |= 1;
+                                break;
+                            case 1: $this->door[$xWalk][$yWalk + 1] |= 2;
+                                break;
+                            case 2: $this->door[$xWalk + 1][$yWalk] |= 4;
+                                break;
+                            case 3: $this->door[$xWalk][$yWalk - 1] |= 8;
+                                break;
+                        }
+                    }
+                } while ($currentGroup === $cell);
+            }
+        }
     }
 
 }

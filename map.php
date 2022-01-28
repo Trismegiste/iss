@@ -9,5 +9,7 @@ $gen->set($side / 2, $side / 2, 1);
 for ($idx = 0; $idx < 19; $idx++) {
     $gen->iterate();
 }
+$gen->roomIterationCapping(3);
+$gen->findDoor();
 
 $gen->dumpSvg();
