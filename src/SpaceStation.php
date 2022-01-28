@@ -215,4 +215,29 @@ class SpaceStation
         }
     }
 
+    public function groupByLevel(): array
+    {
+        $group = [];
+        foreach ($this->grid as $x => $col) {
+            foreach ($col as $y => $cell) {
+                if ($cell !== 0) {
+                    $group[$cell][] = ['x' => $x, 'y' => $y];
+                }
+            }
+        }
+
+        krsort($group);
+
+        return $group;
+    }
+
+    public function groupSplitting(array $groupList)
+    {
+        foreach ($groupList as $level => $squareList) {
+            foreach ($squareList as $startPoint) {
+                $contiguous = $this->floodFill($startPoint);
+            }
+        }
+    }
+
 }
