@@ -27,7 +27,7 @@ class SpaceStation
     {
         foreach ($this->grid as $row) {
             foreach ($row as $cell) {
-                echo ($cell > 0) ? '██' : '  ';
+                echo dechex($cell);
             }
             echo PHP_EOL;
         }
@@ -46,10 +46,18 @@ class SpaceStation
         foreach ($this->grid as $x => $col) {
             foreach ($col as $y => $cell) {
                 $update[$x][$y] = $cell;
+
                 if ($cell === 0) {
                     $neighbor = $this->crossCount($x, $y);
                     if (($neighbor > 0) && (random_int(0, 100) < (25 * $neighbor))) {
                         $update[$x][$y] = 1;
+                    }
+                } else {
+                    $neighbor = $this->neighborCount($x, $y);
+                    if ($neighbor === 8) {
+                        if (random_int(0, 100) < 25) {
+                            $update[$x][$y] = $cell + 1;
+                        }
                     }
                 }
             }
@@ -69,7 +77,8 @@ class SpaceStation
 
     public function neighborCount(int $x, int $y): int
     {
-        $cpt = 0;
+        $cpt = ($this->grid[$x][$y] > 0) ? -1 : 0;
+
         for ($dx = -1; $dx <= 1; $dx++) {
             for ($dy = -1; $dy <= 1; $dy++) {
                 $cpt += ($this->get($x + $dx, $y + $dy) > 0) ? 1 : 0;
