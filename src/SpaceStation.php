@@ -99,4 +99,30 @@ class SpaceStation
         return $cpt;
     }
 
+    public function dumpSvg(): void
+    {
+        $scale = 32;
+        $width = $this->side * $scale;
+        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"$width\" height=\"$width\">";
+
+        foreach ($this->grid as $x => $col) {
+            foreach ($col as $y => $cell) {
+                $x0 = $scale * $x;
+                $y0 = $scale * $y;
+
+                if ($cell !== $this->get($x, $y - 1)) {
+                    $x2 = $x0 + $scale;
+                    echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" stroke=\"black\" />";
+                }
+
+                if ($cell !== $this->get($x - 1, $y)) {
+                    $y2 = $y0 + $scale;
+                    echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x0\" y2=\"$y2\" stroke=\"black\" />";
+                }
+            }
+        }
+
+        echo '</svg>';
+    }
+
 }

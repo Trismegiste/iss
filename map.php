@@ -10,4 +10,4 @@ for ($idx = 0; $idx < 19; $idx++) {
     $gen->iterate();
 }
 
-$gen->dump();
+$gen->dumpSvg();
