@@ -130,24 +130,24 @@ class SpaceStation
             foreach ($col as $y => $door) {
                 $x0 = $scale * $x;
                 $y0 = $scale * $y;
-                if ($door & 1) {
+                if ($door['E']) {
                     $x1 = $x0 + $scale;
                     $y1 = $y0 + $scale / 3;
                     $y2 = $y0 + $scale * 2 / 3;
                     echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x1\" y2=\"$y2\" style=\"$style\"/>";
                 }
-                if ($door & 4) {
+                if ($door['W']) {
                     $x1 = $x0;
                     $y1 = $y0 + $scale / 3;
                     $y2 = $y0 + $scale * 2 / 3;
                     echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x1\" y2=\"$y2\" style=\"$style\"/>";
                 }
-                if ($door & 2) {
+                if ($door['N']) {
                     $x1 = $x0 + $scale / 3;
                     $x2 = $x0 + $scale * 2 / 3;
                     echo "<line x1=\"$x1\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" style=\"$style\"/>";
                 }
-                if ($door & 8) {
+                if ($door['S']) {
                     $y1 = $y0 + $scale;
                     $x1 = $x0 + $scale / 3;
                     $x2 = $x0 + $scale * 2 / 3;
@@ -172,7 +172,7 @@ class SpaceStation
 
     public function findDoor()
     {
-        $this->door = array_fill(0, $this->side, array_fill(0, $this->side, 0));
+        $this->door = array_fill(0, $this->side, array_fill(0, $this->side, ['N' => false, 'S' => false, 'W' => false, 'E' => false]));
         $squaresPerRoomPerLevel = $this->groupSplitting($this->groupByLevel());
 
         foreach ($squaresPerRoomPerLevel as $level => $squaresPerRoom) {
@@ -181,7 +181,7 @@ class SpaceStation
                     return $a['y'] < $b['y'] ? 1 : -1;
                 });
                 $door = array_pop($squares);
-                $this->door[$door['x']][$door['y']] |= 2;
+                $this->door[$door['x']][$door['y']]['N'] = true;
             }
         }
     }
