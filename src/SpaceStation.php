@@ -231,13 +231,42 @@ class SpaceStation
         return $group;
     }
 
-    public function groupSplitting(array $groupList)
+    public function groupSplitting(array $groupList): array
     {
+        $roomPerLevel = [];
         foreach ($groupList as $level => $squareList) {
-            foreach ($squareList as $startPoint) {
-                $contiguous = $this->floodFill($startPoint);
+            $oneLevel = array_fill(0, $this->side, array_fill(0, $this->side, 0));
+            foreach ($squareList as $square) {
+                $oneLevel[$square['x']][$square['y']] = 1;
+            }
+            foreach ($this->levelSplitting($oneLevel) as $roomSquare) {
+                $roomPerLevel[$level][] = $roomSquare;
             }
         }
+
+        return $roomPerLevel;
+    }
+
+    public function levelSplitting(array $mapLevel): array
+    {
+        $roomList = [];
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
+                if ($mapLevel[$x][$y] === 0) {
+                    continue;
+                }
+
+                $filler = new FloodFiller();
+                $squareList = $filler->Scan($mapLevel, ['x' => $x, 'y' => $y]);
+                // remove squares list of the room from the level
+                foreach ($squareList as $square) {
+                    $mapLevel[$square['x']][$square['y']] = 0;
+                }
+                $roomList[] = $squareList;
+            }
+        }
+
+        return $roomList;
     }
 
 }
