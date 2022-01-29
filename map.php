@@ -2,11 +2,11 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$side = 15;
+$side = 25;
 $gen = new \Trismegiste\MapGenerator\SpaceStation($side);
 $gen->set($side / 2, $side / 2, 1);
 
-for ($idx = 0; $idx < 9; $idx++) {
+for ($idx = 0; $idx < 19; $idx++) {
     $gen->iterate();
 }
 

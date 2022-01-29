@@ -173,44 +173,15 @@ class SpaceStation
     public function findDoor()
     {
         $this->door = array_fill(0, $this->side, array_fill(0, $this->side, 0));
+        $squaresPerRoomPerLevel = $this->groupSplitting($this->groupByLevel());
 
-        foreach ($this->grid as $x => $col) {
-            foreach ($col as $y => $cell) {
-                if ($cell === 0) {
-                    continue;
-                }
-
-                $xWalk = $x;
-                $yWalk = $y;
-
-                do {
-                    $direction = random_int(0, 3);
-                    switch ($direction) {
-                        case 0: $xWalk++;
-                            break;
-                        case 1: $yWalk--;
-                            break;
-                        case 2: $xWalk--;
-                            break;
-                        case 3: $yWalk++;
-                            break;
-                    }
-
-                    $currentGroup = $this->get($xWalk, $yWalk);
-                    if ($currentGroup !== $cell) {
-                        // we've just crossed a border
-                        switch ($direction) {
-                            case 0: $this->door[$xWalk - 1][$yWalk] |= 1;
-                                break;
-                            case 1: $this->door[$xWalk][$yWalk + 1] |= 2;
-                                break;
-                            case 2: $this->door[$xWalk + 1][$yWalk] |= 4;
-                                break;
-                            case 3: $this->door[$xWalk][$yWalk - 1] |= 8;
-                                break;
-                        }
-                    }
-                } while ($currentGroup === $cell);
+        foreach ($squaresPerRoomPerLevel as $level => $squaresPerRoom) {
+            foreach ($squaresPerRoom as $squares) {
+                usort($squares, function ($a, $b) {
+                    return $a['y'] < $b['y'] ? 1 : -1;
+                });
+                $door = array_pop($squares);
+                $this->door[$door['x']][$door['y']] |= 2;
             }
         }
     }
