@@ -94,37 +94,36 @@ class SpaceStation
                 $style = "stroke: black; stroke-width: 3";
 
                 if ($cell !== $this->grid[$x][$y - 1]) {
-                    $x2 = $x0 + $scale;
-                    echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" style=\"$style\"/>";
+                    $this->drawLine($x0, $y0, $x0 + $scale, $y0, $style);
                 }
 
                 if ($cell !== $this->grid[$x - 1][$y]) {
-                    $y2 = $y0 + $scale;
-                    echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x0\" y2=\"$y2\" style=\"$style\"/>";
+                    $this->drawLine($x0, $y0, $x0, $y0 + $scale, $style);
                 }
             }
         }
 
 
-        $style = "stroke: green; stroke-width: 5";
+        $style = "stroke: red; stroke-width: 5";
         foreach ($this->door as $x => $col) {
             foreach ($col as $y => $door) {
                 $x0 = $scale * $x;
                 $y0 = $scale * $y;
                 if ($door['W']) {
-                    $y1 = $y0 + $scale / 3;
-                    $y2 = $y0 + $scale * 2 / 3;
-                    echo "<line x1=\"$x0\" y1=\"$y1\" x2=\"$x0\" y2=\"$y2\" style=\"$style\"/>";
+                    $this->drawLine($x0, $y0 + $scale / 3, $x0, $y0 + $scale * 2 / 3, $style);
                 }
                 if ($door['N']) {
-                    $x1 = $x0 + $scale / 3;
-                    $x2 = $x0 + $scale * 2 / 3;
-                    echo "<line x1=\"$x1\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" style=\"$style\"/>";
+                    $this->drawLine($x0 + $scale / 3, $y0, $x0 + $scale * 2 / 3, $y0, $style);
                 }
             }
         }
 
         echo '</svg>';
+    }
+
+    protected function drawLine(int $x1, int $y1, int $x2, int $y2, string $style): void
+    {
+        echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x2\" y2=\"$y2\" style=\"$style\"/>";
     }
 
     public function roomIterationCapping(int $threshold): void
@@ -199,7 +198,7 @@ class SpaceStation
         return $roomPerLevel;
     }
 
-    public function levelSplitting(array $mapLevel): array
+    protected function levelSplitting(array $mapLevel): array
     {
         $roomList = [];
         for ($x = 0; $x < $this->side; $x++) {
