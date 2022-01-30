@@ -33,9 +33,10 @@ class SpaceStation
     {
         $update = array_fill(0, $this->side, array_fill(0, $this->side, 0));
 
-        foreach ($this->grid as $x => $col) {
-            foreach ($col as $y => $cell) {
-                $update[$x][$y] = $cell;
+        for ($x = 1; $x < $this->side - 1; $x++) {
+            for ($y = 1; $y < $this->side - 1; $y++) {
+                $cell = $this->grid[$x][$y];
+                $update[$x][$y] = $cell; // default value since we'll have random update
 
                 if ($cell === 0) {
                     $neighbor = $this->crossCount($x, $y);
@@ -56,22 +57,13 @@ class SpaceStation
         $this->grid = $update;
     }
 
-    public function get(int $x, int $y): int
-    {
-        if (($x >= 0) && ($x < $this->side) && ($y >= 0) && ($y < $this->side)) {
-            return $this->grid[$x][$y];
-        }
-
-        return 0;
-    }
-
     public function neighborCount(int $x, int $y): int
     {
         $cpt = ($this->grid[$x][$y] > 0) ? -1 : 0;
 
         for ($dx = -1; $dx <= 1; $dx++) {
             for ($dy = -1; $dy <= 1; $dy++) {
-                $cpt += ($this->get($x + $dx, $y + $dy) > 0) ? 1 : 0;
+                $cpt += ($this->grid[$x + $dx][$y + $dy] > 0) ? 1 : 0;
             }
         }
 
@@ -80,11 +72,10 @@ class SpaceStation
 
     public function crossCount(int $x, int $y): int
     {
-        $cpt = 0;
-        $cpt += ($this->get($x + 1, $y) > 0) ? 1 : 0;
-        $cpt += ($this->get($x, $y + 1) > 0) ? 1 : 0;
-        $cpt += ($this->get($x - 1, $y) > 0) ? 1 : 0;
-        $cpt += ($this->get($x, $y - 1) > 0) ? 1 : 0;
+        $cpt = ($this->grid[$x + 1][$y] > 0) ? 1 : 0;
+        $cpt += ($this->grid[$x - 1][$y] > 0) ? 1 : 0;
+        $cpt += ($this->grid[$x][$y + 1] > 0) ? 1 : 0;
+        $cpt += ($this->grid[$x][$y - 1] > 0) ? 1 : 0;
 
         return $cpt;
     }
@@ -95,18 +86,19 @@ class SpaceStation
         $width = $this->side * $scale;
         echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"$width\" height=\"$width\">";
 
-        foreach ($this->grid as $x => $col) {
-            foreach ($col as $y => $cell) {
+        for ($x = 1; $x < $this->side; $x++) {
+            for ($y = 1; $y < $this->side; $y++) {
+                $cell = $this->grid[$x][$y];
                 $x0 = $scale * $x;
                 $y0 = $scale * $y;
                 $style = "stroke: black; stroke-width: 3";
 
-                if ($cell !== $this->get($x, $y - 1)) {
+                if ($cell !== $this->grid[$x][$y - 1]) {
                     $x2 = $x0 + $scale;
                     echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" style=\"$style\"/>";
                 }
 
-                if ($cell !== $this->get($x - 1, $y)) {
+                if ($cell !== $this->grid[$x - 1][$y]) {
                     $y2 = $y0 + $scale;
                     echo "<line x1=\"$x0\" y1=\"$y0\" x2=\"$x0\" y2=\"$y2\" style=\"$style\"/>";
                 }
