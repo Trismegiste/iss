@@ -24,17 +24,6 @@ class SpaceStation
         $this->grid = array_fill(0, $side, array_fill(0, $side, 0));
     }
 
-    public function dump(): void
-    {
-        foreach ($this->grid as $row) {
-            foreach ($row as $cell) {
-                echo dechex($cell);
-            }
-            echo PHP_EOL;
-        }
-        echo PHP_EOL;
-    }
-
     public function set(int $x, int $y, int $grp): void
     {
         $this->grid[$x][$y] = $grp;
@@ -130,28 +119,15 @@ class SpaceStation
             foreach ($col as $y => $door) {
                 $x0 = $scale * $x;
                 $y0 = $scale * $y;
-                if ($door['E']) {
-                    $x1 = $x0 + $scale;
-                    $y1 = $y0 + $scale / 3;
-                    $y2 = $y0 + $scale * 2 / 3;
-                    echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x1\" y2=\"$y2\" style=\"$style\"/>";
-                }
                 if ($door['W']) {
-                    $x1 = $x0;
                     $y1 = $y0 + $scale / 3;
                     $y2 = $y0 + $scale * 2 / 3;
-                    echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x1\" y2=\"$y2\" style=\"$style\"/>";
+                    echo "<line x1=\"$x0\" y1=\"$y1\" x2=\"$x0\" y2=\"$y2\" style=\"$style\"/>";
                 }
                 if ($door['N']) {
                     $x1 = $x0 + $scale / 3;
                     $x2 = $x0 + $scale * 2 / 3;
                     echo "<line x1=\"$x1\" y1=\"$y0\" x2=\"$x2\" y2=\"$y0\" style=\"$style\"/>";
-                }
-                if ($door['S']) {
-                    $y1 = $y0 + $scale;
-                    $x1 = $x0 + $scale / 3;
-                    $x2 = $x0 + $scale * 2 / 3;
-                    echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x2\" y2=\"$y1\" style=\"$style\"/>";
                 }
             }
         }
@@ -172,16 +148,29 @@ class SpaceStation
 
     public function findDoor()
     {
-        $this->door = array_fill(0, $this->side, array_fill(0, $this->side, ['N' => false, 'S' => false, 'W' => false, 'E' => false]));
+        $this->door = array_fill(0, $this->side, array_fill(0, $this->side, ['N' => false, 'W' => false]));
         $squaresPerRoomPerLevel = $this->groupSplitting($this->groupByLevel());
 
         foreach ($squaresPerRoomPerLevel as $level => $squaresPerRoom) {
             foreach ($squaresPerRoom as $squares) {
+                // door on north
                 usort($squares, function ($a, $b) {
-                    return $a['y'] < $b['y'] ? 1 : -1;
+                    return $a['y'] < $b['y'] ? -1 : 1;
                 });
-                $door = array_pop($squares);
+                $door = $squares[0];
                 $this->door[$door['x']][$door['y']]['N'] = true;
+
+                // door on west or east
+                usort($squares, function ($a, $b) {
+                    return $a['x'] < $b['x'] ? -1 : 1;
+                });
+                if (random_int(0, 1)) {
+                    $door = $squares[0];
+                    $this->door[$door['x']][$door['y']]['W'] = true;
+                } else {
+                    $door = $squares[count($squares) - 1];
+                    $this->door[$door['x'] + 1][$door['y']]['W'] = true;
+                }
             }
         }
     }
