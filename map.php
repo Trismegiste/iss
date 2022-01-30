@@ -6,7 +6,7 @@ $side = 25;
 $gen = new \Trismegiste\MapGenerator\SpaceStation($side);
 $gen->set($side / 2, $side / 2, 1);
 
-for ($idx = 0; $idx < 40; $idx++) {
+for ($idx = 0; $idx < 15; $idx++) {
     $gen->iterate();
 }
 

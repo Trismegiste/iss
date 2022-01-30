@@ -82,38 +82,37 @@ class SpaceStation
 
     public function dumpSvg(): void
     {
-        $scale = 32;
-        $width = $this->side * $scale;
-        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"$width\" height=\"$width\">";
+        $width = $this->side;
+        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $width $width\">";
+        $this->drawSquare(0, 0, $width, 'white');
 
         for ($x = 1; $x < $this->side; $x++) {
             for ($y = 1; $y < $this->side; $y++) {
                 $cell = $this->grid[$x][$y];
-                $x0 = $scale * $x;
-                $y0 = $scale * $y;
-                $style = "stroke: black; stroke-width: 3";
+                $style = "stroke: black; stroke-width: 0.1";
+
+                if ($cell > 0) {
+                    $this->drawSquare($x, $y, 1, '#dddddd');
+                }
 
                 if ($cell !== $this->grid[$x][$y - 1]) {
-                    $this->drawLine($x0, $y0, $x0 + $scale, $y0, $style);
+                    $this->drawLine($x, $y, $x + 1, $y, $style);
                 }
 
                 if ($cell !== $this->grid[$x - 1][$y]) {
-                    $this->drawLine($x0, $y0, $x0, $y0 + $scale, $style);
+                    $this->drawLine($x, $y, $x, $y + 1, $style);
                 }
             }
         }
 
-
-        $style = "stroke: red; stroke-width: 5";
+        $style = "stroke: red; stroke-width: 0.15";
         foreach ($this->door as $x => $col) {
             foreach ($col as $y => $door) {
-                $x0 = $scale * $x;
-                $y0 = $scale * $y;
                 if ($door['W']) {
-                    $this->drawLine($x0, $y0 + $scale / 3, $x0, $y0 + $scale * 2 / 3, $style);
+                    $this->drawLine($x, $y + 1 / 4, $x, $y + 3 / 4, $style);
                 }
                 if ($door['N']) {
-                    $this->drawLine($x0 + $scale / 3, $y0, $x0 + $scale * 2 / 3, $y0, $style);
+                    $this->drawLine($x + 1 / 4, $y, $x + 3 / 4, $y, $style);
                 }
             }
         }
@@ -121,7 +120,12 @@ class SpaceStation
         echo '</svg>';
     }
 
-    protected function drawLine(int $x1, int $y1, int $x2, int $y2, string $style): void
+    protected function drawSquare(float $x, float $y, float $size, string $color): void
+    {
+        echo "<rect x=\"$x\" y=\"$y\" width=\"$size\" height=\"$size\" fill=\"$color\"/>";
+    }
+
+    protected function drawLine(float $x1, float $y1, float $x2, float $y2, string $style): void
     {
         echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x2\" y2=\"$y2\" style=\"$style\"/>";
     }
