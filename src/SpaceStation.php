@@ -22,11 +22,22 @@ class SpaceStation
     {
         $this->side = $side;
         $this->grid = array_fill(0, $side, array_fill(0, $side, 0));
+        $this->door = [];
     }
 
     public function set(int $x, int $y, int $grp): void
     {
         $this->grid[$x][$y] = $grp;
+    }
+
+    public function getGrid(): array
+    {
+        return $this->grid;
+    }
+
+    public function getDoors(): array
+    {
+        return $this->door;
     }
 
     public function iterate(): void
@@ -139,6 +150,48 @@ class SpaceStation
                 }
             }
         }
+    }
+
+    public function getMinMaxX(): array
+    {
+        $min = $this->side;
+        $max = 0;
+
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
+                if ($this->grid[$x][$y] > 0) {
+                    if ($max < $x) {
+                        $max = $x;
+                    }
+                    if ($min > $x) {
+                        $min = $x;
+                    }
+                }
+            }
+        }
+
+        return ['min' => $min, 'max' => $max];
+    }
+
+    public function getMinMaxY(): array
+    {
+        $min = $this->side;
+        $max = 0;
+
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
+                if ($this->grid[$x][$y] > 0) {
+                    if ($max < $y) {
+                        $max = $y;
+                    }
+                    if ($min > $y) {
+                        $min = $y;
+                    }
+                }
+            }
+        }
+
+        return ['min' => $min, 'max' => $max];
     }
 
     public function findDoor()

@@ -1,6 +1,7 @@
 {
-    "name": "trismegiste/ssg",
+    "name": "trismegiste/rpg-map-generator",
     "type": "library",
+    "description": "Various procedural algorithms for generating battlemaps for roleplaying games",
     "require-dev": {
         "phpunit/phpunit": "9.5"
     },
@@ -8,6 +9,11 @@
     "autoload": {
         "psr-4": {
             "Trismegiste\\MapGenerator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Trismegiste\\MapGenerator\\": "tests/"
         }
     },
     "authors": [
