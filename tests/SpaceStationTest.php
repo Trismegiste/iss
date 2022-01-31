@@ -53,12 +53,11 @@ class SpaceStationTest extends TestCase
             $this->sut->iterate();
         }
 
-        $borneX = $this->sut->getMinMaxX();
-        $this->assertGreaterThan(12, $borneX['max']);
-        $this->assertLessThan(12, $borneX['min']);
-        $borneY = $this->sut->getMinMaxY();
-        $this->assertGreaterThan(12, $borneY['max']);
-        $this->assertLessThan(12, $borneY['min']);
+        $borne = $this->sut->getMinMax();
+        $this->assertGreaterThan(12, $borne['xmax']);
+        $this->assertLessThan(12, $borne['xmin']);
+        $this->assertGreaterThan(12, $borne['ymax']);
+        $this->assertLessThan(12, $borne['ymin']);
     }
 
     public function testDoorsOneSquare()

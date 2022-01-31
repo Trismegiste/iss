@@ -152,46 +152,31 @@ class SpaceStation
         }
     }
 
-    public function getMinMaxX(): array
+    public function getMinMax(): array
     {
-        $min = $this->side;
-        $max = 0;
+        $xmin = $ymin = $this->side;
+        $xmax = $ymax = 0;
 
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
                 if ($this->grid[$x][$y] > 0) {
-                    if ($max < $x) {
-                        $max = $x;
+                    if ($xmax < $x) {
+                        $xmax = $x;
                     }
-                    if ($min > $x) {
-                        $min = $x;
+                    if ($xmin > $x) {
+                        $xmin = $x;
+                    }
+                    if ($ymax < $y) {
+                        $ymax = $y;
+                    }
+                    if ($ymin > $y) {
+                        $ymin = $y;
                     }
                 }
             }
         }
 
-        return ['min' => $min, 'max' => $max];
-    }
-
-    public function getMinMaxY(): array
-    {
-        $min = $this->side;
-        $max = 0;
-
-        for ($x = 0; $x < $this->side; $x++) {
-            for ($y = 0; $y < $this->side; $y++) {
-                if ($this->grid[$x][$y] > 0) {
-                    if ($max < $y) {
-                        $max = $y;
-                    }
-                    if ($min > $y) {
-                        $min = $y;
-                    }
-                }
-            }
-        }
-
-        return ['min' => $min, 'max' => $max];
+        return ['xmin' => $xmin, 'xmax' => $xmax, 'ymin' => $ymin, 'ymax' => $ymax];
     }
 
     public function findDoor()
