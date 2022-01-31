@@ -4,7 +4,7 @@
  * MapGenerator
  */
 
-namespace Trismegiste\MapGenerator;
+namespace Trismegiste\MapGenerator\Utils;
 
 /**
  * @title:  Flood Fill Class

@@ -4,12 +4,14 @@
  * MapGenerator
  */
 
-namespace Trismegiste\MapGenerator;
+namespace Trismegiste\MapGenerator\Procedural;
+
+use Trismegiste\MapGenerator\Utils\FloodFiller;
 
 /**
  * Procedural generator of modular habitats (space station, tin can station, city block...)
  */
-class SpaceStation
+class SpaceStation implements CellularAutomata
 {
 
     protected $side;
@@ -20,7 +22,7 @@ class SpaceStation
     {
         $this->side = $side;
         $this->grid = array_fill(0, $side, array_fill(0, $side, 0));
-        $this->door = [];
+        $this->door = array_fill(0, $this->side, array_fill(0, $this->side, ['N' => false, 'W' => false]));
     }
 
     /**

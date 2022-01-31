@@ -5,7 +5,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use Trismegiste\MapGenerator\SpaceStation;
+use Trismegiste\MapGenerator\Procedural\SpaceStation;
 
 class SpaceStationTest extends TestCase
 {
@@ -23,7 +23,7 @@ class SpaceStationTest extends TestCase
         $this->assertCount(25, $grid);
         $this->assertCount(25, $grid[0]);
         $this->assertCount(25, $grid[24]);
-        $this->assertCount(0, $this->sut->getDoors());
+        $this->assertCount(25, $this->sut->getDoors());
     }
 
     public function testSetter()
