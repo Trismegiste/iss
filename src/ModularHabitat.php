@@ -30,4 +30,42 @@ class ModularHabitat
         return $gen;
     }
 
+    public function createDistrictGenerator(int $sizePerBlock, int $blockCount, int $iteration, int $capping): CellularAutomata
+    {
+        $gen = new SpaceStation($sizePerBlock * $blockCount);
+        for ($col = $sizePerBlock / 2; $col < $blockCount * $sizePerBlock; $col += $sizePerBlock) {
+            for ($row = $sizePerBlock / 2; $row < $blockCount * $sizePerBlock; $row += $sizePerBlock) {
+                $gen->set($col, $row);
+            }
+        }
+
+        for ($idx = 0; $idx < $iteration; $idx++) {
+            $gen->iterate();
+        }
+
+        $gen->roomIterationCapping($capping);
+        $gen->findDoor();
+
+        return $gen;
+    }
+
+    public function createStreetGenerator(int $streetWidth, int $streetCount, int $iteration, int $capping): CellularAutomata
+    {
+        $gen = new SpaceStation($streetWidth * $streetCount);
+        for ($col = $streetWidth / 2; $col < $streetCount * $streetWidth; $col += $streetWidth) {
+            for ($row = 1; $row < $streetCount * $streetWidth - 1; $row++) {
+                $gen->set($col, $row);
+            }
+        }
+
+        for ($idx = 0; $idx < $iteration; $idx++) {
+            $gen->iterate();
+        }
+
+        $gen->roomIterationCapping($capping);
+        $gen->findDoor();
+
+        return $gen;
+    }
+
 }
