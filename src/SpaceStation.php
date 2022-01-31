@@ -7,9 +7,7 @@
 namespace Trismegiste\MapGenerator;
 
 /**
- * Description of SpaceStation
- *
- * @author flo
+ * Procedural generator of modular station
  */
 class SpaceStation
 {
@@ -25,21 +23,38 @@ class SpaceStation
         $this->door = [];
     }
 
-    public function set(int $x, int $y, int $grp): void
+    /**
+     * Sets one square on the grid
+     * @param int $x
+     * @param int $y
+     * @param int $grp The iteration count of the square (default : 1)
+     */
+    public function set(int $x, int $y, int $grp = 1): void
     {
         $this->grid[$x][$y] = $grp;
     }
 
+    /**
+     * Gets the grid content 
+     * @return array An array of array : ($this->side)×($this->side) squares
+     */
     public function getGrid(): array
     {
         return $this->grid;
     }
 
+    /**
+     * Gets the listing of doors
+     * @return array An array of array : ($this->side)×($this->side) item containing an array ['N' => false|true, 'W' => false|true]
+     */
     public function getDoors(): array
     {
         return $this->door;
     }
 
+    /**
+     * Runs an iteration of the generation
+     */
     public function iterate(): void
     {
         $update = array_fill(0, $this->side, array_fill(0, $this->side, 0));
@@ -68,6 +83,13 @@ class SpaceStation
         $this->grid = $update;
     }
 
+    /**
+     * Returns the count of non-zero neighbors. There are 8 neighbors of a square
+     * WARNING : this function does not check whether the boundaries (x,y) are ok or not !
+     * @param int $x
+     * @param int $y
+     * @return int
+     */
     public function neighborCount(int $x, int $y): int
     {
         $cpt = ($this->grid[$x][$y] > 0) ? -1 : 0;
@@ -81,6 +103,13 @@ class SpaceStation
         return $cpt;
     }
 
+    /**
+     * Returns the count of non-zero neighbors placed on a cross. There are 4 neighbors of a square
+     * WARNING : this function does not check whether the boundaries (x,y) are ok or not !
+     * @param int $x
+     * @param int $y
+     * @return int
+     */
     public function crossCount(int $x, int $y): int
     {
         $cpt = ($this->grid[$x + 1][$y] > 0) ? 1 : 0;
@@ -91,6 +120,9 @@ class SpaceStation
         return $cpt;
     }
 
+    /**
+     * Prints the SVG result on the standard stream
+     */
     public function dumpSvg(): void
     {
         $width = $this->side;
@@ -117,8 +149,9 @@ class SpaceStation
         }
 
         $style = "stroke: red; stroke-width: 0.15";
-        foreach ($this->door as $x => $col) {
-            foreach ($col as $y => $door) {
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
+                $door = $this->door[$x][$y];
                 if ($door['W']) {
                     $this->drawLine($x, $y + 1 / 4, $x, $y + 3 / 4, $style);
                 }
@@ -131,20 +164,31 @@ class SpaceStation
         echo '</svg>';
     }
 
+    /**
+     * Print a square with a color of SVG
+     */
     protected function drawSquare(float $x, float $y, float $size, string $color): void
     {
         echo "<rect x=\"$x\" y=\"$y\" width=\"$size\" height=\"$size\" fill=\"$color\"/>";
     }
 
+    /**
+     * Print a line of SVG
+     */
     protected function drawLine(float $x1, float $y1, float $x2, float $y2, string $style): void
     {
         echo "<line x1=\"$x1\" y1=\"$y1\" x2=\"$x2\" y2=\"$y2\" style=\"$style\"/>";
     }
 
+    /**
+     * Iterates on each square and caps the level of iteration
+     * @param int $threshold All square above $threshold are capped at $threshold
+     */
     public function roomIterationCapping(int $threshold): void
     {
-        foreach ($this->grid as $x => $col) {
-            foreach ($col as $y => $cell) {
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
+                $cell = $this->grid[$x][$y];
                 if ($cell > $threshold) {
                     $this->grid[$x][$y] = $threshold;
                 }
@@ -152,6 +196,10 @@ class SpaceStation
         }
     }
 
+    /**
+     * Scans the grids and returns the x & y boundaries of a non-zero subset of the grid
+     * @return array
+     */
     public function getMinMax(): array
     {
         $xmin = $ymin = $this->side;
@@ -179,7 +227,10 @@ class SpaceStation
         return ['xmin' => $xmin, 'xmax' => $xmax, 'ymin' => $ymin, 'ymax' => $ymax];
     }
 
-    public function findDoor()
+    /**
+     * Generates doors of the current grid
+     */
+    public function findDoor(): void
     {
         $this->door = array_fill(0, $this->side, array_fill(0, $this->side, ['N' => false, 'W' => false]));
         $squaresPerRoomPerLevel = $this->groupSplitting($this->groupByLevel());
@@ -208,11 +259,16 @@ class SpaceStation
         }
     }
 
+    /**
+     * Slices the grid by level of iteration
+     * @return array A list by level of A list of [x,y] for each level
+     */
     public function groupByLevel(): array
     {
         $group = [];
-        foreach ($this->grid as $x => $col) {
-            foreach ($col as $y => $cell) {
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
+                $cell = $this->grid[$x][$y];
                 if ($cell !== 0) {
                     $group[$cell][] = ['x' => $x, 'y' => $y];
                 }
@@ -224,6 +280,11 @@ class SpaceStation
         return $group;
     }
 
+    /**
+     * Slices a level of iteration to generate a list of independant rooms
+     * @param array $groupList
+     * @return array
+     */
     public function groupSplitting(array $groupList): array
     {
         $roomPerLevel = [];
@@ -240,6 +301,12 @@ class SpaceStation
         return $roomPerLevel;
     }
 
+    /**
+     * Splits one level of iteration into a list of rooms.
+     * A room is a list of squares
+     * @param array $mapLevel
+     * @return array
+     */
     protected function levelSplitting(array $mapLevel): array
     {
         $roomList = [];
@@ -251,7 +318,7 @@ class SpaceStation
 
                 $filler = new FloodFiller();
                 $squareList = $filler->Scan($mapLevel, ['x' => $x, 'y' => $y]);
-                // remove squares list of the room from the level
+                // remove squares list of the room from the current level
                 foreach ($squareList as $square) {
                     $mapLevel[$square['x']][$square['y']] = 0;
                 }

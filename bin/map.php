@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $side = 25;
 $gen = new \Trismegiste\MapGenerator\SpaceStation($side);
