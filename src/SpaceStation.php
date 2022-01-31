@@ -7,7 +7,7 @@
 namespace Trismegiste\MapGenerator;
 
 /**
- * Procedural generator of modular station
+ * Procedural generator of modular habitats (space station, tin can station, city block...)
  */
 class SpaceStation
 {
@@ -84,7 +84,7 @@ class SpaceStation
     }
 
     /**
-     * Returns the count of non-zero neighbors. There are 8 neighbors of a square
+     * Returns the count of non-zero neighbors. There are 8 neighbors around a square
      * WARNING : this function does not check whether the boundaries (x,y) are ok or not !
      * @param int $x
      * @param int $y
@@ -104,7 +104,7 @@ class SpaceStation
     }
 
     /**
-     * Returns the count of non-zero neighbors placed on a cross. There are 4 neighbors of a square
+     * Returns the count of non-zero neighbors placed on a cross. There are 4 neighbors around a square
      * WARNING : this function does not check whether the boundaries (x,y) are ok or not !
      * @param int $x
      * @param int $y
@@ -129,37 +129,47 @@ class SpaceStation
         echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $width $width\">";
         $this->drawSquare(0, 0, $width, 'white');
 
-        for ($x = 1; $x < $this->side; $x++) {
-            for ($y = 1; $y < $this->side; $y++) {
+        // Floors
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
                 $cell = $this->grid[$x][$y];
-                $style = "stroke: black; stroke-width: 0.1";
-
                 if ($cell > 0) {
                     $this->drawSquare($x, $y, 1, '#dddddd');
-                }
-
-                if ($cell !== $this->grid[$x][$y - 1]) {
-                    $this->drawLine($x, $y, $x + 1, $y, $style);
-                }
-
-                if ($cell !== $this->grid[$x - 1][$y]) {
-                    $this->drawLine($x, $y, $x, $y + 1, $style);
                 }
             }
         }
 
-        $style = "stroke: red; stroke-width: 0.15";
+        // Walls
+        echo '<path style="stroke: black; stroke-width: 0.1" d="';
+        for ($x = 1; $x < $this->side; $x++) {
+            for ($y = 1; $y < $this->side; $y++) {
+                $cell = $this->grid[$x][$y];
+
+                if ($cell !== $this->grid[$x][$y - 1]) {
+                    echo " M $x $y h 1";
+                }
+
+                if ($cell !== $this->grid[$x - 1][$y]) {
+                    echo " M $x $y v 1";
+                }
+            }
+        }
+        echo '"/>';
+
+        // Doors
+        echo '<path style="stroke: red; stroke-width: 0.15" d="';
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
                 $door = $this->door[$x][$y];
                 if ($door['W']) {
-                    $this->drawLine($x, $y + 1 / 4, $x, $y + 3 / 4, $style);
+                    echo " M $x $y m 0 0.25 v 0.5";
                 }
                 if ($door['N']) {
-                    $this->drawLine($x + 1 / 4, $y, $x + 3 / 4, $y, $style);
+                    echo " M $x $y m 0.25 0 h 0.5";
                 }
             }
         }
+        echo '"/>';
 
         echo '</svg>';
     }
