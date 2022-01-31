@@ -25,4 +25,18 @@ class ModularHabitatTest extends TestCase
         $this->assertCount(25, $proc->getGrid());
     }
 
+    public function testCreateStreet()
+    {
+        $proc = $this->sut->createStreetGenerator(20, 3, 12, 3);
+        $this->assertInstanceOf(SpaceStation::class, $proc);
+        $this->assertCount(60, $proc->getGrid());
+    }
+
+    public function testCreateDistrict()
+    {
+        $proc = $this->sut->createDistrictGenerator(20, 3, 22, 4);
+        $this->assertInstanceOf(SpaceStation::class, $proc);
+        $this->assertCount(60, $proc->getGrid());
+    }
+
 }
