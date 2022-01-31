@@ -136,7 +136,8 @@ class SpaceStation implements CellularAutomata
             for ($y = 0; $y < $this->side; $y++) {
                 $cell = $this->grid[$x][$y];
                 if ($cell > 0) {
-                    $this->drawSquare($x, $y, 1, '#dddddd');
+                    $grey = 95 - min($cell, 6) * 5;
+                    $this->drawSquare($x, $y, 1, "hsl(0, 0%, $grey%)");
                 }
             }
         }
