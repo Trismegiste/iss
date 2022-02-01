@@ -342,4 +342,20 @@ class SpaceStation implements CellularAutomata
         return $roomList;
     }
 
+    public function countPerlevel(): array
+    {
+        $counter = [];
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
+                $cell = $this->grid[$x][$y];
+                if (!key_exists($cell, $counter)) {
+                    $counter[$cell] = 0;
+                }
+                $counter[$cell]++;
+            }
+        }
+
+        return $counter;
+    }
+
 }
