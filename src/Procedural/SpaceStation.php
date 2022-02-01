@@ -165,10 +165,10 @@ class SpaceStation implements CellularAutomata
             for ($y = 0; $y < $this->side; $y++) {
                 $door = $this->door[$x][$y];
                 if ($door['W']) {
-                    echo " M $x $y m 0 0.25 v 0.5";
+                    echo " M $x $y.25 v 0.5";
                 }
                 if ($door['N']) {
-                    echo " M $x $y m 0.25 0 h 0.5";
+                    echo " M $x.25 $y h 0.5";
                 }
             }
         }
