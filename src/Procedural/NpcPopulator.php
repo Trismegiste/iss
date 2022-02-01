@@ -16,6 +16,9 @@ class NpcPopulator
     protected $side;
     protected $npcCount;
 
+    /**
+     * @refactor inject the cellularAutomaton here, not in generate method
+     */
     public function __construct(int $side, int $npcCount)
     {
         $this->side = $side;
@@ -23,6 +26,9 @@ class NpcPopulator
         $this->npc = array_fill(0, $side, array_fill(0, $side, 0));
     }
 
+    /**
+     * @refactor specificy the number of NPC
+     */
     public function generate(CellularAutomata $map): void
     {
         $grid = $map->getGrid();

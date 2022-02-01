@@ -11,6 +11,7 @@ use Trismegiste\MapGenerator\Procedural\SpaceStation;
 
 /**
  * Facade for procedural generators
+ * @refactor : must think in layers of <g>
  */
 class ModularHabitat
 {
