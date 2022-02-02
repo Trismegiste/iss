@@ -6,43 +6,18 @@
 
 namespace Trismegiste\MapGenerator\Procedural;
 
-use Trismegiste\MapGenerator\Utils\FloodFiller;
-
 /**
  * Procedural generator of modular habitats (space station, tin can station, city block...)
  */
-class SpaceStation implements CellularAutomaton
+class SpaceStation extends GenericAutomaton
 {
 
-    protected $side;
-    protected $grid;
     protected $door;
 
     public function __construct(int $side)
     {
-        $this->side = $side;
-        $this->grid = array_fill(0, $side, array_fill(0, $side, 0));
+        parent::__construct($side);
         $this->door = new DoorLayer($this);
-    }
-
-    /**
-     * Sets one square on the grid
-     * @param int $x
-     * @param int $y
-     * @param int $grp The iteration count of the square (default : 1)
-     */
-    public function set(int $x, int $y, int $grp = 1): void
-    {
-        $this->grid[$x][$y] = $grp;
-    }
-
-    /**
-     * Gets the grid content 
-     * @return array An array of array : ($this->side)×($this->side) squares
-     */
-    public function getGrid(): array
-    {
-        return $this->grid;
     }
 
     /**
@@ -149,7 +124,7 @@ class SpaceStation implements CellularAutomaton
             }
         }
         echo '"/>';
-        
+
         $this->door->printSvg();
 
         echo '</svg>';
@@ -218,27 +193,6 @@ class SpaceStation implements CellularAutomaton
         return ['xmin' => $xmin, 'xmax' => $xmax, 'ymin' => $ymin, 'ymax' => $ymax];
     }
 
-    /**
-     * Slices the grid by level of iteration
-     * @return array A list by level of A list of [x,y] for each level
-     */
-    public function groupByLevel(): array
-    {
-        $group = [];
-        for ($x = 0; $x < $this->side; $x++) {
-            for ($y = 0; $y < $this->side; $y++) {
-                $cell = $this->grid[$x][$y];
-                if ($cell !== 0) {
-                    $group[$cell][] = ['x' => $x, 'y' => $y];
-                }
-            }
-        }
-
-        krsort($group);
-
-        return $group;
-    }
-
     public function countPerlevel(): array
     {
         $counter = [];
@@ -253,11 +207,6 @@ class SpaceStation implements CellularAutomaton
         }
 
         return $counter;
-    }
-
-    public function getSize(): int
-    {
-        return $this->side;
     }
 
     /**
