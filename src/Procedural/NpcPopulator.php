@@ -9,31 +9,28 @@ namespace Trismegiste\MapGenerator\Procedural;
 /**
  * Populates a grid with NPC
  */
-class NpcPopulator
+class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
 {
 
     protected $npc;
     protected $side;
-    protected $npcCount;
+    protected $automat;
 
-    /**
-     * @refactor inject the cellularAutomaton here, not in generate method
-     */
-    public function __construct(int $side, int $npcCount)
+    public function __construct(CellularAutomaton $map)
     {
-        $this->side = $side;
-        $this->npcCount = $npcCount;
-        $this->npc = array_fill(0, $side, array_fill(0, $side, 0));
+        $this->automat = $map;
+        $this->side = $map->getSize();
+        $this->npc = array_fill(0, $this->side, array_fill(0, $this->side, 0));
     }
 
     /**
-     * @refactor specificy the number of NPC
+     * generates NPC
      */
-    public function generate(CellularAutomata $map): void
+    public function generate(int $npcCount): void
     {
-        $grid = $map->getGrid();
+        $grid = $this->automat->getGrid();
         $cpt = 0;
-        while ($cpt < $this->npcCount) {
+        while ($cpt < $npcCount) {
             $x = random_int(0, $this->side - 1);
             $y = random_int(0, $this->side - 1);
             $cell = $grid[$x][$y];
@@ -44,7 +41,7 @@ class NpcPopulator
         }
     }
 
-    public function printSvg()
+    public function printSvg(): void
     {
         $width = $this->side;
         echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $width $width\">";
