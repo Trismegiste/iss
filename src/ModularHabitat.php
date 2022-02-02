@@ -16,7 +16,12 @@ use Trismegiste\MapGenerator\Procedural\SpaceStation;
 class ModularHabitat
 {
 
-    public function createOneBlockGenerator(int $side, int $iteration, int $capping): CellularAutomaton
+    protected function drawSquare(float $x, float $y, float $size, string $color): void
+    {
+        echo "<rect x=\"$x\" y=\"$y\" width=\"$size\" height=\"$size\" fill=\"$color\"/>";
+    }
+
+    public function createOneBlockGenerator(int $side, int $iteration, int $capping): void
     {
         $gen = new SpaceStation($side);
         $gen->set($side / 2, $side / 2, 1);
@@ -24,11 +29,18 @@ class ModularHabitat
         for ($idx = 0; $idx < $iteration; $idx++) {
             $gen->iterate();
         }
-
         $gen->roomIterationCapping($capping);
-        $gen->findDoor();
+        $door = new Procedural\DoorLayer($gen);
+        $door->findDoor();
+        $pop = new Procedural\NpcPopulator($gen);
+        $pop->generate(20);
 
-        return $gen;
+        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $side $side\">";
+        $this->drawSquare(0, 0, $side, 'white');
+        $gen->printSvg();
+        $door->printSvg();
+        $pop->printSvg();
+        echo '</svg>';
     }
 
     public function createDistrictGenerator(int $sizePerBlock, int $blockCount, int $iteration, int $capping): CellularAutomaton

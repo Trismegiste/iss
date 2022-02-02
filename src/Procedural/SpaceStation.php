@@ -12,14 +12,6 @@ namespace Trismegiste\MapGenerator\Procedural;
 class SpaceStation extends GenericAutomaton
 {
 
-    protected $door;
-
-    public function __construct(int $side)
-    {
-        parent::__construct($side);
-        $this->door = new DoorLayer($this);
-    }
-
     /**
      * Runs an iteration of the generation
      */
@@ -94,8 +86,6 @@ class SpaceStation extends GenericAutomaton
     public function printSvg(): void
     {
         $width = $this->side;
-        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $width $width\">";
-        $this->drawSquare(0, 0, $width, 'white');
 
         // Floors
         for ($x = 0; $x < $this->side; $x++) {
@@ -124,10 +114,6 @@ class SpaceStation extends GenericAutomaton
             }
         }
         echo '"/>';
-
-        $this->door->printSvg();
-
-        echo '</svg>';
     }
 
     /**
@@ -207,23 +193,6 @@ class SpaceStation extends GenericAutomaton
         }
 
         return $counter;
-    }
-
-    /**
-     * Gets the listing of doors
-     * @return array An array of array : ($this->side)×($this->side) item containing an array ['N' => false|true, 'W' => false|true]
-     */
-    public function getDoors(): array
-    {
-        return $this->door->getDoors();
-    }
-
-    /**
-     * Generates doors of the current grid
-     */
-    public function findDoor(): void
-    {
-        $this->door->findDoor();
     }
 
 }

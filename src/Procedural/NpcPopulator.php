@@ -43,8 +43,6 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
 
     public function printSvg(): void
     {
-        $width = $this->side;
-        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $width $width\">";
         echo '<g fill="green">';
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
@@ -54,7 +52,6 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
             }
         }
         echo '</g>';
-        echo '</svg>';
     }
 
 }
