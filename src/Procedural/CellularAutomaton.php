@@ -9,7 +9,7 @@ namespace Trismegiste\MapGenerator\Procedural;
 /**
  * Contract for cellular automaton
  */
-interface CellularAutomaton
+interface CellularAutomaton extends \Trismegiste\MapGenerator\SvgPrintable
 {
 
     public function set(int $x, int $y, int $grp = 1): void;
@@ -18,7 +18,7 @@ interface CellularAutomaton
 
     public function iterate(): void;
 
-    public function printSvg(): void;
-
     public function getSize(): int;
+
+    public function groupByLevel(): array;
 }
