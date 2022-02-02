@@ -11,7 +11,7 @@ use Trismegiste\MapGenerator\Utils\FloodFiller;
 /**
  * Procedural generator of modular habitats (space station, tin can station, city block...)
  */
-class SpaceStation implements CellularAutomata
+class SpaceStation implements CellularAutomaton
 {
 
     protected $side;
@@ -125,7 +125,7 @@ class SpaceStation implements CellularAutomata
     /**
      * Prints the SVG result on the standard stream
      */
-    public function dumpSvg(): void
+    public function printSvg(): void
     {
         $width = $this->side;
         echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $width $width\">";
@@ -356,6 +356,11 @@ class SpaceStation implements CellularAutomata
         }
 
         return $counter;
+    }
+
+    public function getSize(): int
+    {
+        return $this->side;
     }
 
 }

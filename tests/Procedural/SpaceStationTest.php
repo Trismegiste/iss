@@ -116,7 +116,7 @@ class SpaceStationTest extends TestCase
         } $this->sut->roomIterationCapping(4);
         $this->sut->findDoor();
         ob_start();
-        $this->sut->dumpSvg();
+        $this->sut->printSvg();
         $svg = ob_get_clean();
         $this->assertStringStartsWith('<svg', $svg);
         $this->assertStringEndsWith('</svg>', $svg);

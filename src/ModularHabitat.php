@@ -6,7 +6,7 @@
 
 namespace Trismegiste\MapGenerator;
 
-use Trismegiste\MapGenerator\Procedural\CellularAutomata;
+use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
 use Trismegiste\MapGenerator\Procedural\SpaceStation;
 
 /**
@@ -16,7 +16,7 @@ use Trismegiste\MapGenerator\Procedural\SpaceStation;
 class ModularHabitat
 {
 
-    public function createOneBlockGenerator(int $side, int $iteration, int $capping): CellularAutomata
+    public function createOneBlockGenerator(int $side, int $iteration, int $capping): CellularAutomaton
     {
         $gen = new SpaceStation($side);
         $gen->set($side / 2, $side / 2, 1);
@@ -31,7 +31,7 @@ class ModularHabitat
         return $gen;
     }
 
-    public function createDistrictGenerator(int $sizePerBlock, int $blockCount, int $iteration, int $capping): CellularAutomata
+    public function createDistrictGenerator(int $sizePerBlock, int $blockCount, int $iteration, int $capping): CellularAutomaton
     {
         $gen = new SpaceStation($sizePerBlock * $blockCount);
         for ($col = $sizePerBlock / 2; $col < $blockCount * $sizePerBlock; $col += $sizePerBlock) {
@@ -50,7 +50,7 @@ class ModularHabitat
         return $gen;
     }
 
-    public function createStreetGenerator(int $streetWidth, int $streetCount, int $iteration, int $capping): CellularAutomata
+    public function createStreetGenerator(int $streetWidth, int $streetCount, int $iteration, int $capping): CellularAutomaton
     {
         $gen = new SpaceStation($streetWidth * $streetCount);
         for ($col = $streetWidth / 2; $col < $streetCount * $streetWidth; $col += $streetWidth) {

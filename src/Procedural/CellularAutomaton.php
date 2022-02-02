@@ -7,9 +7,9 @@
 namespace Trismegiste\MapGenerator\Procedural;
 
 /**
- * Cotract for cellular automata
+ * Contract for cellular automaton
  */
-interface CellularAutomata
+interface CellularAutomaton
 {
 
     public function set(int $x, int $y, int $grp = 1): void;
@@ -18,5 +18,7 @@ interface CellularAutomata
 
     public function iterate(): void;
 
-    public function dumpSvg(): void;
+    public function printSvg(): void;
+
+    public function getSize(): int;
 }
