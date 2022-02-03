@@ -26,13 +26,13 @@ class SpaceStation extends GenericAutomaton
 
                 if ($cell === 0) {
                     $neighbor = $this->crossCount($x, $y);
-                    if (($neighbor > 0) && (random_int(0, 100) < (25 * $neighbor))) {
+                    if (($neighbor > 0) && (rand(0, 100) < (25 * $neighbor))) {
                         $update[$x][$y] = 1;
                     }
                 } else {
                     $neighbor = $this->neighborCount($x, $y);
                     if ($neighbor === 8) {
-                        if (random_int(0, 100) < 25) {
+                        if (rand(0, 100) < 25) {
                             $update[$x][$y] = $cell + 1;
                         }
                     }
@@ -87,6 +87,7 @@ class SpaceStation extends GenericAutomaton
     {
         $width = $this->side;
 
+        echo '<g class="building">';
         // Floors
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
@@ -114,6 +115,7 @@ class SpaceStation extends GenericAutomaton
             }
         }
         echo '"/>';
+        echo '</g>';
     }
 
     public function blurry(): void

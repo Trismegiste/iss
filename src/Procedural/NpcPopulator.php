@@ -31,8 +31,8 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
         $grid = $this->automat->getGrid();
         $cpt = 0;
         while ($cpt < $npcCount) {
-            $x = random_int(0, $this->side - 1);
-            $y = random_int(0, $this->side - 1);
+            $x = rand(0, $this->side - 1);
+            $y = rand(0, $this->side - 1);
             $cell = $grid[$x][$y];
             if (($cell === 0) && ($this->npc[$x][$y] === 0)) {
                 $this->npc[$x][$y] = 1;

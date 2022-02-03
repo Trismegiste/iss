@@ -20,23 +20,29 @@ class ModularHabitatTest extends TestCase
 
     public function testCreateOneBlock()
     {
-        $proc = $this->sut->createOneBlockGenerator(25, 19, 4);
-        $this->assertInstanceOf(SpaceStation::class, $proc);
-        $this->assertCount(25, $proc->getGrid());
+        ob_start();
+        $this->sut->createOneBlockGenerator(25, 19, 4);
+        $svg = ob_get_clean();
+        $this->assertStringStartsWith('<svg', $svg);
+        $this->assertStringEndsWith('</svg>', $svg);
     }
 
     public function testCreateStreet()
     {
-        $proc = $this->sut->createStreetGenerator(20, 3, 12, 3);
-        $this->assertInstanceOf(SpaceStation::class, $proc);
-        $this->assertCount(60, $proc->getGrid());
+        ob_start();
+        $this->sut->createStreetGenerator(20, 3, 12, 3);
+        $svg = ob_get_clean();
+        $this->assertStringStartsWith('<svg', $svg);
+        $this->assertStringEndsWith('</svg>', $svg);
     }
 
     public function testCreateDistrict()
     {
-        $proc = $this->sut->createDistrictGenerator(20, 3, 22, 4);
-        $this->assertInstanceOf(SpaceStation::class, $proc);
-        $this->assertCount(60, $proc->getGrid());
+        ob_start();
+        $this->sut->createDistrictGenerator(20, 3, 22, 4);
+        $svg = ob_get_clean();
+        $this->assertStringStartsWith('<svg', $svg);
+        $this->assertStringEndsWith('</svg>', $svg);
     }
 
 }

@@ -21,7 +21,6 @@ class FogOfWar implements \Trismegiste\MapGenerator\SvgPrintable
 
     public function printSvg(): void
     {
-        $width = $this->automat->getSize();
         $group = $this->automat->groupByLevel();
 
         // fog on non-null

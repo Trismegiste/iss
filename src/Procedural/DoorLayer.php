@@ -73,7 +73,7 @@ class DoorLayer implements SvgPrintable
                 usort($squares, function ($a, $b) {
                     return $a['x'] < $b['x'] ? -1 : 1;
                 });
-                if (random_int(0, 1)) {
+                if (rand(0, 1)) {
                     $door = $squares[0];
                     $this->door[$door['x']][$door['y']]['W'] = true;
                 } else {

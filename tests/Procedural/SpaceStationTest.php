@@ -23,7 +23,6 @@ class SpaceStationTest extends TestCase
         $this->assertCount(25, $grid);
         $this->assertCount(25, $grid[0]);
         $this->assertCount(25, $grid[24]);
-        $this->assertCount(25, $this->sut->getDoors());
     }
 
     public function testSetter()
@@ -60,34 +59,6 @@ class SpaceStationTest extends TestCase
         $this->assertLessThan(12, $borne['ymin']);
     }
 
-    public function testDoorsOneSquare()
-    {
-        $this->sut->set(12, 12, 1);
-        $this->sut->findDoor();
-        $doors = $this->sut->getDoors();
-        $this->assertTrue($doors[12][12]['N']);
-    }
-
-    public function testDoorsOVerticalHallway()
-    {
-        $this->sut->set(12, 11, 1);
-        $this->sut->set(12, 12, 1);
-        $this->sut->set(12, 13, 1);
-        $this->sut->findDoor();
-        $doors = $this->sut->getDoors();
-        $this->assertTrue($doors[12][11]['N']);
-    }
-
-    public function testDoorsOHorizontalHallway()
-    {
-        $this->sut->set(11, 12, 1);
-        $this->sut->set(12, 12, 1);
-        $this->sut->set(13, 12, 1);
-        $this->sut->findDoor();
-        $doors = $this->sut->getDoors();
-        $this->assertTrue($doors[11][12]['W'] xor $doors[14][12]['W']);
-    }
-
     public function testCapping()
     {
         $this->sut->set(12, 12, 1);
@@ -114,12 +85,11 @@ class SpaceStationTest extends TestCase
         for ($idx = 0; $idx < 15; $idx++) {
             $this->sut->iterate();
         } $this->sut->roomIterationCapping(4);
-        $this->sut->findDoor();
         ob_start();
         $this->sut->printSvg();
         $svg = ob_get_clean();
-        $this->assertStringStartsWith('<svg', $svg);
-        $this->assertStringEndsWith('</svg>', $svg);
+        $this->assertStringStartsWith('<g', $svg);
+        $this->assertStringEndsWith('</g>', $svg);
     }
 
 }
