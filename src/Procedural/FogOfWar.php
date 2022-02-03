@@ -22,19 +22,18 @@ class FogOfWar implements \Trismegiste\MapGenerator\SvgPrintable
     public function printSvg(): void
     {
         $width = $this->automat->getSize();
-        $grid = $this->automat->getGrid();
+        $group = $this->automat->groupByLevel();
 
         // fog on non-null
-        echo '<g fill="black" id="fog-of-war">';
-        for ($x = 0; $x < $width; $x++) {
-            for ($y = 0; $y < $width; $y++) {
-                $cell = $grid[$x][$y];
-                if ($cell > 0) {
-                    echo "<rect x=\"$x\" y=\"$y\" width=\"1\" height=\"1\"/>";
-                }
+        foreach ($group as $level => $listing) {
+            echo '<g fill="black" class="fog-of-war" data-level="' . $level . '">';
+            foreach ($listing as $square) {
+                $x = $square['x'];
+                $y = $square['y'];
+                echo "<rect x=\"$x\" y=\"$y\" width=\"1\" height=\"1\"/>";
             }
+            echo '</g>';
         }
-        echo '</g>';
     }
 
 }
