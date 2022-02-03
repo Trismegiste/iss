@@ -11,7 +11,6 @@ use Trismegiste\MapGenerator\Procedural\SpaceStation;
 
 /**
  * Facade for procedural generators
- * @refactor : must think in layers of <g>
  */
 class ModularHabitat
 {
@@ -26,6 +25,9 @@ class ModularHabitat
         }
         //    $gen->roomIterationCapping($capping);
         $gen->roomIterationDivide(3);
+        $gen->blurry();
+        $gen->iterate();
+
         $door = new Procedural\DoorLayer($gen);
         $door->findDoor();
         $pop = new Procedural\NpcPopulator($gen);
@@ -35,7 +37,7 @@ class ModularHabitat
         $map = new RpgMap($gen);
         $map->appendLayer($door);
         $map->appendLayer($pop);
-       // $map->appendLayer($fog);
+        // $map->appendLayer($fog);
 
         $map->printSvg();
     }
