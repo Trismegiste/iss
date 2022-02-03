@@ -24,17 +24,20 @@ class ModularHabitat
         for ($idx = 0; $idx < $iteration; $idx++) {
             $gen->iterate();
         }
-        $gen->roomIterationCapping($capping);
+        //    $gen->roomIterationCapping($capping);
+        $gen->roomIterationDivide(3);
         $door = new Procedural\DoorLayer($gen);
         $door->findDoor();
         $pop = new Procedural\NpcPopulator($gen);
         $pop->generate(30);
+        $fog = new Procedural\FogOfWar($gen);
 
         echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $side $side\">";
         echo "<rect x=\"0\" y=\"0\" width=\"$side\" height=\"$side\" fill=\"white\"/>";
         $gen->printSvg();
         $door->printSvg();
         $pop->printSvg();
+        $fog->printSvg();
         echo '</svg>';
     }
 

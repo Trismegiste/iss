@@ -116,6 +116,34 @@ class SpaceStation extends GenericAutomaton
         echo '"/>';
     }
 
+    public function blurry(): void
+    {
+        $update = array_fill(0, $this->side, array_fill(0, $this->side, 0));
+
+        for ($x = 1; $x < $this->side - 1; $x++) {
+            for ($y = 1; $y < $this->side - 1; $y++) {
+                $sum = 0;
+                for ($dx = -1; $dx <= 1; $dx++) {
+                    for ($dy = -1; $dy <= 1; $dy++) {
+                        $sum += $this->grid[$x + $dx][$y + $dy];
+                    }
+                }
+                $update[$x][$y] = (int) ceil($sum / 9);
+            }
+        }
+
+        $this->grid = $update;
+    }
+
+    public function roomIterationDivide(float $divider): void
+    {
+        for ($x = 0; $x < $this->side; $x++) {
+            for ($y = 0; $y < $this->side; $y++) {
+                $this->grid[$x][$y] = (int) ceil($this->grid[$x][$y] / ($divider * 1.0));
+            }
+        }
+    }
+
     /**
      * Print a square with a color of SVG
      */
