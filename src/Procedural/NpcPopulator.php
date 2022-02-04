@@ -43,7 +43,7 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
 
     public function printSvg(): void
     {
-        echo '<g fill="green">';
+        echo '<g fill="darkkhaki">';
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
                 if ($this->npc[$x][$y]) {
