@@ -47,7 +47,7 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
                 if ($this->npc[$x][$y]) {
-                    echo "<circle cx=\"$x.5\" cy=\"$y.5\" r=\"0.4\"/>";
+                    echo "<circle cx=\"$x.5\" cy=\"$y.5\" r=\"0.2\"/>";
                 }
             }
         }
