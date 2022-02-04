@@ -6,7 +6,9 @@
 
 namespace Trismegiste\MapGenerator;
 
-use Trismegiste\MapGenerator\Procedural\CellularAutomaton;
+use Trismegiste\MapGenerator\Procedural\DoorLayer;
+use Trismegiste\MapGenerator\Procedural\FogOfWar;
+use Trismegiste\MapGenerator\Procedural\NpcPopulator;
 use Trismegiste\MapGenerator\Procedural\SpaceStation;
 
 /**
@@ -28,11 +30,11 @@ class ModularHabitat
         $gen->blurry();
         $gen->iterate();
 
-        $door = new Procedural\DoorLayer($gen);
+        $door = new DoorLayer($gen);
         $door->findDoor();
-        $pop = new Procedural\NpcPopulator($gen);
+        $pop = new NpcPopulator($gen);
         $pop->generate(50);
-        $fog = new Procedural\FogOfWar($gen);
+        $fog = new FogOfWar($gen);
 
         $map = new RpgMap($gen);
         $map->appendLayer($door);
@@ -57,17 +59,15 @@ class ModularHabitat
         }
 
         $gen->roomIterationCapping($capping);
-        $door = new Procedural\DoorLayer($gen);
+        $door = new DoorLayer($gen);
         $door->findDoor();
-        $pop = new Procedural\NpcPopulator($gen);
+        $pop = new NpcPopulator($gen);
         $pop->generate(30);
 
-        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $side $side\">";
-        echo "<rect x=\"0\" y=\"0\" width=\"$side\" height=\"$side\" fill=\"white\"/>";
-        $gen->printSvg();
-        $door->printSvg();
-        $pop->printSvg();
-        echo '</svg>';
+        $map = new RpgMap($gen);
+        $map->appendLayer($door);
+        $map->appendLayer($pop);
+        $map->printSvg();
     }
 
     public function createStreetGenerator(int $streetWidth, int $streetCount, int $iteration, int $capping)
@@ -85,17 +85,15 @@ class ModularHabitat
         }
 
         $gen->roomIterationCapping($capping);
-        $door = new Procedural\DoorLayer($gen);
+        $door = new DoorLayer($gen);
         $door->findDoor();
-        $pop = new Procedural\NpcPopulator($gen);
+        $pop = new NpcPopulator($gen);
         $pop->generate(300);
 
-        echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $side $side\">";
-        echo "<rect x=\"0\" y=\"0\" width=\"$side\" height=\"$side\" fill=\"white\"/>";
-        $gen->printSvg();
-        $door->printSvg();
-        $pop->printSvg();
-        echo '</svg>';
+        $map = new RpgMap($gen);
+        $map->appendLayer($door);
+        $map->appendLayer($pop);
+        $map->printSvg();
     }
 
 }
