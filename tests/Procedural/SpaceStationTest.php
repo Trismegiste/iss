@@ -92,4 +92,29 @@ class SpaceStationTest extends TestCase
         $this->assertStringEndsWith('</g>', $svg);
     }
 
+    public function testGroupByLevel()
+    {
+        $this->sut->set(12, 12, 1);
+        $this->sut->set(12, 13, 2);
+        $grp = $this->sut->groupByLevel();
+        $this->assertCount(2, $grp);
+        $this->assertEquals(['x' => 12, 'y' => 12], $grp[1][0]);
+        $this->assertEquals(['x' => 12, 'y' => 13], $grp[2][0]);
+
+        return $grp;
+    }
+
+    /**
+     * @depends testGroupByLevel
+     */
+    public function testSplitting(array $group)
+    {
+        $splitted = $this->sut->splitEachLevelIntoRoom($group);
+        $this->assertCount(2, $splitted);
+        $this->assertCount(1, $splitted[1][0]); // the first room on level 1 is one square
+        $this->assertCount(1, $splitted[2][0]); // the first room on level 2 is one square
+        $this->assertEquals(['x' => 12, 'y' => 12], $splitted[1][0][0]);
+        $this->assertEquals(['x' => 12, 'y' => 13], $splitted[2][0][0]);
+    }
+
 }
