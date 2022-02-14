@@ -141,7 +141,9 @@ class SpaceStation extends GenericAutomaton
     {
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
-                $this->grid[$x][$y] = (int) ceil($this->grid[$x][$y] / ($divider * 1.0));
+                if ($this->grid[$x][$y] > 0) {
+                    $this->grid[$x][$y] = 1 + (int) ceil(($this->grid[$x][$y] - 1.0) / ($divider * 1.0));
+                }
             }
         }
     }
@@ -218,7 +220,7 @@ class SpaceStation extends GenericAutomaton
                 if (!key_exists($cell, $counter)) {
                     $counter[$cell] = 0;
                 }
-                $counter[$cell]++;
+                $counter[$cell] ++;
             }
         }
 
