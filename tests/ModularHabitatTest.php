@@ -23,7 +23,7 @@ class ModularHabitatTest extends TestCase
         ob_start();
         $this->sut->createOneBlockGenerator(25, 19, 4);
         $svg = ob_get_clean();
-        $this->assertStringStartsWith('<svg', $svg);
+        $this->assertStringContainsString('<svg', $svg);
         $this->assertStringEndsWith('</svg>', $svg);
     }
 
@@ -32,7 +32,7 @@ class ModularHabitatTest extends TestCase
         ob_start();
         $this->sut->createStreetGenerator(20, 3, 12, 3);
         $svg = ob_get_clean();
-        $this->assertStringStartsWith('<svg', $svg);
+        $this->assertStringContainsString('<svg', $svg);
         $this->assertStringEndsWith('</svg>', $svg);
     }
 
@@ -41,7 +41,7 @@ class ModularHabitatTest extends TestCase
         ob_start();
         $this->sut->createDistrictGenerator(20, 3, 22, 4);
         $svg = ob_get_clean();
-        $this->assertStringStartsWith('<svg', $svg);
+        $this->assertStringContainsString('<svg', $svg);
         $this->assertStringEndsWith('</svg>', $svg);
     }
 
