@@ -67,16 +67,26 @@ class RpgMap implements SvgPrintable
         echo '</svg>';
     }
 
-    static public function extractParameters(string $content): array
+    /**
+     * This static helper does not really belong here but in a repository.
+     * On the other hand, this extraction is tightly bound to this class format in printSvg method
+     * @param string $content
+     * @return \stdClass
+     */
+    static public function extractMetadata(string $content): \stdClass
     {
         $doc = new \DOMDocument();
         $doc->loadXML($content);
 
         $xpath = new \DOMXPath($doc);
         $xpath->registerNamespace('svg', 'http://www.w3.org/2000/svg');
-        $listing = $xpath->query('/svg:svg/svg:desc');
+        $title = trim($xpath->query('/svg:svg/svg:title')->item(0)->nodeValue);
+        $desc = json_decode($xpath->query('/svg:svg/svg:desc')->item(0)->nodeValue, true);
 
-        return json_decode($listing->item(0)->nodeValue, true);
+        return (object) [
+                    'tagTitle' => $title,
+                    'tagDesc' => $desc
+        ];
     }
 
 }

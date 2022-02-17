@@ -25,15 +25,20 @@ class RpgMapTest extends TestCase
         $this->assertStringEndsWith('</svg>', $str);
     }
 
-    public function testParamMetadata()
+    public function testMetadata()
     {
+        $this->sut->setTitle('Free sample');
         $this->sut->setParameters(['yolo' => 123]);
         ob_start();
         $this->sut->printSvg();
         $str = ob_get_clean();
 
-        $extracted = RpgMap::extractParameters($str);
-        $this->assertEquals(['yolo' => 123], $extracted);
+        $extracted = RpgMap::extractMetadata($str);
+        $this->assertInstanceOf(\stdClass::class, $extracted);
+        $this->assertObjectHasAttribute('tagTitle', $extracted);
+        $this->assertObjectHasAttribute('tagDesc', $extracted);
+        $this->assertEquals('Free sample', $extracted->tagTitle);
+        $this->assertEquals(['yolo' => 123], $extracted->tagDesc);
     }
 
 }
