@@ -25,8 +25,9 @@ class FogOfWar implements \Trismegiste\MapGenerator\SvgPrintable
 
         // fog on non-null
         foreach ($group as $level => $roomList) {
-            foreach ($roomList as $room) {
+            foreach ($roomList as $idx=>$room) {
                 echo '<g fill="black" class="fog-of-war" data-level="' . $level . '">';
+                echo "<title>room-$level-$idx</title>";
                 foreach ($room as $square) {
                     $x = $square['x'];
                     $y = $square['y'];
