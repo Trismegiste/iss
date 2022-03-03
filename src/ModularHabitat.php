@@ -33,7 +33,7 @@ class ModularHabitat
         $door = new DoorLayer($gen);
         $door->findDoor();
         $pop = new NpcPopulator($gen);
-        $pop->generate(50);
+        $pop->generate(50, 0);
         $fog = new FogOfWar($gen);
 
         $map = new RpgMap($gen);
@@ -62,7 +62,7 @@ class ModularHabitat
         $door = new DoorLayer($gen);
         $door->findDoor();
         $pop = new NpcPopulator($gen);
-        $pop->generate(30);
+        $pop->generate(30, 0);
 
         $map = new RpgMap($gen);
         $map->appendLayer($door);
@@ -88,7 +88,7 @@ class ModularHabitat
         $door = new DoorLayer($gen);
         $door->findDoor();
         $pop = new NpcPopulator($gen);
-        $pop->generate(300);
+        $pop->generate(300, 0);
 
         $map = new RpgMap($gen);
         $map->appendLayer($door);

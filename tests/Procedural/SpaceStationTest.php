@@ -89,7 +89,7 @@ class SpaceStationTest extends TestCase
         $this->sut->printSvg();
         $svg = ob_get_clean();
         $this->assertStringStartsWith('<g', $svg);
-        $this->assertStringEndsWith('</g>', $svg);
+        $this->assertStringEndsWith("</g>\n", $svg);
     }
 
     public function testGroupByLevel()
