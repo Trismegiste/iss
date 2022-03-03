@@ -17,6 +17,7 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
     protected $npc;
     protected $side;
     protected $automat;
+    protected $radius;
 
     public function __construct(CellularAutomaton $map)
     {
@@ -28,8 +29,9 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
     /**
      * generates NPC
      */
-    public function generate(int $outsiderCount, int $insiderCount): void
+    public function generate(int $outsiderCount, int $insiderCount, float $radius = 0.2): void
     {
+        $this->radius = $radius;
         $grid = $this->automat->getGrid();
         $outsider = $insider = 0;
         $deadline = microtime(true) + self::timeout;
@@ -56,10 +58,14 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
     public function printSvg(): void
     {
         echo '<g fill="darkkhaki" id="token-layer">';
+        $idx = 0;
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
                 if ($this->npc[$x][$y]) {
-                    echo "<circle cx=\"$x.5\" cy=\"$y.5\" r=\"0.2\"/>";
+                    echo "<circle cx=\"$x.5\" cy=\"$y.5\" r=\"{$this->radius}\">";
+                    echo "<title>npc-$idx</title>";
+                    echo "</circle>\n";
+                    $idx++;
                 }
             }
         }
