@@ -41,7 +41,7 @@ class DoorLayer implements SvgPrintable
                 }
             }
         }
-        echo '"/>';
+        echo '"/>'.PHP_EOL;
     }
 
     /**

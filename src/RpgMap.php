@@ -56,7 +56,7 @@ class RpgMap implements SvgPrintable
         echo "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" width=\"800\" height=\"800\" viewBox=\"0 0 $side $side\">\n";
         echo "<title>{$this->title}</title>\n";
         echo "<desc><![CDATA[" . json_encode($this->parameter) . "]]></desc>\n";
-        echo "<rect x=\"0\" y=\"0\" width=\"$side\" height=\"$side\" fill=\"white\"/>";
+        echo "<rect x=\"0\" y=\"0\" width=\"$side\" height=\"$side\" fill=\"white\"/>\n";
 
         $this->cell->printSvg();
 

@@ -115,7 +115,7 @@ class SpaceStation extends GenericAutomaton
             }
         }
         echo '"/>';
-        echo '</g>';
+        echo '</g>' . PHP_EOL;
     }
 
     public function blurry(): void
@@ -220,7 +220,7 @@ class SpaceStation extends GenericAutomaton
                 if (!key_exists($cell, $counter)) {
                     $counter[$cell] = 0;
                 }
-                $counter[$cell] ++;
+                $counter[$cell]++;
             }
         }
 

@@ -12,6 +12,8 @@ namespace Trismegiste\MapGenerator\Procedural;
 class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
 {
 
+    const timeout = 0.1; // one tenth of second
+
     protected $npc;
     protected $side;
     protected $automat;
@@ -26,24 +28,34 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
     /**
      * generates NPC
      */
-    public function generate(int $npcCount): void
+    public function generate(int $outsiderCount, int $insiderCount): void
     {
         $grid = $this->automat->getGrid();
-        $cpt = 0;
-        while ($cpt < $npcCount) {
+        $outsider = $insider = 0;
+        $deadline = microtime(true) + self::timeout;
+        while ((microtime(true) < $deadline) && (($insider < $insiderCount) || ($outsider < $outsiderCount))) {
             $x = rand(0, $this->side - 1);
             $y = rand(0, $this->side - 1);
-            $cell = $grid[$x][$y];
-            if (($cell === 0) && ($this->npc[$x][$y] === 0)) {
-                $this->npc[$x][$y] = 1;
-                $cpt++;
+            if ($this->npc[$x][$y] === 0) {
+                $cell = $grid[$x][$y];
+                if ($cell === 0) {
+                    if ($outsider < $outsiderCount) {
+                        $this->npc[$x][$y] = 1;
+                        $outsider++;
+                    }
+                } else {
+                    if ($insider < $insiderCount) {
+                        $this->npc[$x][$y] = 1;
+                        $insider++;
+                    }
+                }
             }
         }
     }
 
     public function printSvg(): void
     {
-        echo '<g fill="darkkhaki">';
+        echo '<g fill="darkkhaki" id="token-layer">';
         for ($x = 0; $x < $this->side; $x++) {
             for ($y = 0; $y < $this->side; $y++) {
                 if ($this->npc[$x][$y]) {
@@ -51,7 +63,7 @@ class NpcPopulator implements \Trismegiste\MapGenerator\SvgPrintable
                 }
             }
         }
-        echo '</g>';
+        echo '</g>' . PHP_EOL;
     }
 
 }
