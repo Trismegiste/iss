@@ -93,8 +93,8 @@ class SpaceStation extends GenericAutomaton
             for ($y = 0; $y < $this->side; $y++) {
                 $cell = $this->grid[$x][$y];
                 if ($cell > 0) {
-                    $grey = 95 - min($cell, 6) * 5;
-                    $this->drawSquare($x, $y, 1, "hsl(0, 0%, $grey%)");
+                    $grey = (1 + min($cell, 6) ) / 20;
+                    echo "<rect x=\"$x\" y=\"$y\" width=\"1\" height=\"1\" fill=\"black\" fill-opacity=\"$grey\"/>";
                 }
             }
         }
@@ -220,7 +220,7 @@ class SpaceStation extends GenericAutomaton
                 if (!key_exists($cell, $counter)) {
                     $counter[$cell] = 0;
                 }
-                $counter[$cell]++;
+                $counter[$cell] ++;
             }
         }
 
